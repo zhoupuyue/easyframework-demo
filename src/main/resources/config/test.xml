@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- SQL配置文件 -->
+<config namespace="test">
+	
+	<!-- 查询用户 -->
+	<sql id="getUserCount">
+		select count(*) from t_user
+	</sql>
+	
+	<sql id="queryUserById">
+		select * from t_user where id = #{id}
+	</sql>
+	
+	<sql id="saveUser">
+		insert into t_user(user_name,user_age,user_city,user_company,user_sex) values(#{username},#{age},#{city},#{company},#{sex})
+	</sql>
+	
+</config>

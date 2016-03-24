@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns:p="http://www.springframework.org/schema/p"
+	   xmlns:context="http://www.springframework.org/schema/context"
+	   xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans
+	   					   http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+	   					   http://www.springframework.org/schema/aop
+	   					   http://www.springframework.org/schema/aop/spring-aop-3.2.xsd
+	   					   http://www.springframework.org/schema/tx
+	   					   http://www.springframework.org/schema/tx/spring-tx-3.2.xsd
+	   					   http://www.springframework.org/schema/context
+	   					   http://www.springframework.org/schema/context/spring-context-3.2.xsd">
+	
+	<context:component-scan base-package="demo.service"/>
+	
+	<!-- Spring对象工厂 -->
+	<bean class="org.easyframework.plugin.spring.SpringObjectFactory"/>
+	
+	<!-- MySQL数据源配置 -->
+	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
+		<property name="driverClass" value="com.mysql.jdbc.Driver"/>
+		<property name="jdbcUrl" value="jdbc:mysql://10.202.249.123:3306/feiniu_cart0?allowMultiQueries=true"/>
+		<property name="user" value="feiniu_cart"/>
+		<property name="password" value="feiniu_cart123"/>
+		<property name="initialPoolSize" value="5"/>
+		<property name="minPoolSize" value="5"/>
+		<property name="maxPoolSize" value="50"/>
+		<property name="maxIdleTime" value="600"/>
+		<property name="checkoutTimeout" value="3000"/>
+		<property name="acquireIncrement" value="1"/>
+		<property name="acquireRetryAttempts" value="30"/>
+		<property name="acquireRetryDelay" value="1000"/>
+		<property name="autoCommitOnClose" value="false"/>
+		<property name="preferredTestQuery" value="select 1 from dual"/>
+		<property name="breakAfterAcquireFailure" value="false"/>
+		<property name="idleConnectionTestPeriod" value="600"/>
+		<property name="maxStatements" value="0"/>
+	</bean>
+	
+	<!-- 数据库连接工厂 -->
+	<bean id="connectionFactory" class="org.easyframework.plugin.spring.SpringConnectionFactory">
+		<property name="configPath" value="/config"/>
+		<property name="dataSource" ref="dataSource"/>
+	</bean>
+	
+	<!-- BaseDao -->
+	<bean id="beaseDao" class="org.easyframework.persistence.dao.EasyDao">
+		<property name="connectionFactory" ref="connectionFactory"/>
+	</bean>
+	
+	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+
+	<tx:annotation-driven transaction-manager="transactionManager" />
+	
+</beans>
