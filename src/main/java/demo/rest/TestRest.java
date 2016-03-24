@@ -84,9 +84,12 @@ public class TestRest {
 		return "ok";
 	}
 
-	@Request(value = "/test/string", ajax = true)
-	public String testString(@Param("s") String s) {
-		byte[] ss = s.getBytes();
+	@Request(value = "/test/testExceptionHandler", ajax = true)
+	public String testExceptionHandler() {
+		int i = 1;
+		if (i == 1) {
+			throw new RuntimeException();
+		}
 		return "ok";
 	}
 
